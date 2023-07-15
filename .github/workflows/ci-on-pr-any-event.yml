@@ -35,7 +35,7 @@ jobs:
                       echo "project=$project"
                       echo "project=$project" >> $GITHUB_OUTPUT
         outputs:
-            project: ${{toJson(steps.*.outputs.project)}}
+            project: ${{steps.*.outputs.project}}
                      
   
     comment_test:
