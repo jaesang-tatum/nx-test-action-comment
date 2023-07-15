@@ -30,7 +30,7 @@ jobs:
                       echo "project=$project"
                       echo "project=$project" >> $GITHUB_OUTPUT
         outputs:
-            project: ${{steps.*.outputs.project}}
+            project: "[\"module/common\", \"product/api\"]"
                      
   
     comment_test:
