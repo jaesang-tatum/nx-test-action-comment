@@ -1,0 +1,52 @@
+name: CI
+on:
+    push:
+        branches: ['*']
+
+jobs:
+    test:
+        runs-on: ubuntu-lastest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+              with:
+                fetch-depth: 0
+            
+            - name: Saved result path
+              id: SaveResultPath
+              run: |
+                    for type in module product; do
+                        if [ -d "./coverage/$type" ]; then
+                            for dir in `ls ./coverage/$type`; do
+                                echo "project=$type/$dir"
+                                echo "project=$type/$dir" >> $GITHUB_OUTPUT
+                              done
+                        fi
+                    done
+                     
+  
+    comment_test:
+      runs-on: ubuntu-lastest
+      needs: [test]
+      steps:
+        - name: Test
+          run: echo "js_${{toJson(needs.test.outputs.project)}}"
+  
+    comment:
+      runs-on: ubuntu-lastest
+      needs: [test]
+      strategy:
+        matrix:
+          value: ${{fromJSON(needs.test.outputs.project)}}
+      if : ${{success() && needs.test.outputs.project != null }}
+      steps:
+          - name: Jest Coverage Comment
+            uses: MishaKav/jest-coverage-comment@main
+            with:
+              github-token: ${{github.token}}
+              title: ${{matrix.value}} Coverage
+              summary-title: ${{matrix.value}} Summary
+              coverage-title: ${{matrix.value}} Coverage Title
+              coverage-summary-path: ./coverage/${{matrix.value}}/coverage-summary.json
+
