@@ -1,6 +1,6 @@
 name: CI
 on:
-    push:
+    pull_request:
         branches: ['*']
 
 jobs:
@@ -30,7 +30,7 @@ jobs:
                       echo "project=$project"
                       echo "project=$project" >> $GITHUB_OUTPUT
         outputs:
-            project: "[\"module/common\", \"product/api\"]"
+            project: ${{toJson(steps.*.outputs.project)}}
                      
   
     comment_test:
@@ -49,7 +49,7 @@ jobs:
       needs: [test]
       strategy:
         matrix:
-          value: ${{fromJSON(needs.test.outputs.project)}}
+          value: ${{needs.test.outputs.project}}
       if : ${{success() && needs.test.outputs.project != null }}
       steps:
           - name: Jest Coverage Comment
