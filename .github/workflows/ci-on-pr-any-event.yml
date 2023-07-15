@@ -33,7 +33,7 @@ jobs:
                       echo "project=$project"
                       echo "project=$project" >> $GITHUB_OUTPUT
         outputs:
-            project: ${{toJson(steps.SaveResultPath.outputs.project)}}
+            project: ${{steps.SaveResultPath.outputs.project}}
                      
   
     comment_test:
@@ -52,7 +52,7 @@ jobs:
       needs: [test]
       strategy:
         matrix:
-          value: ${{needs.test.outputs.project}}
+          value: ${{fromJSON(needs.test.outputs.project)}}
       if : ${{success() && needs.test.outputs.project != null }}
       steps:
           - name: Jest Coverage Comment
