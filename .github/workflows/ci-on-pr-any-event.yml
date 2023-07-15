@@ -16,7 +16,7 @@ jobs:
             - name: Saved result path
               id: SaveResultPath
               run: |
-                      project='['
+                      project=''
                       saved=0
                       for type in module product; do
                           if [ -d "./coverage/$type" ]; then
@@ -31,7 +31,6 @@ jobs:
                           project=${project::-1}
                       fi
 
-                      project+=']'
                       echo "project=$project"
                       echo "project=$project" >> $GITHUB_OUTPUT
         outputs:
