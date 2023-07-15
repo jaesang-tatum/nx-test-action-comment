@@ -16,17 +16,20 @@ jobs:
             - name: Saved result path
               id: SaveResultPath
               run: |
-                      project=''
+                      project='['
                       saved=0
                       for type in module product; do
                           if [ -d "./coverage/$type" ]; then
                               for dir in `ls ./coverage/$type`; do
                                   saved=1
-                                  project+="$type/$dir "
+                                  project+="\"$type/$dir\","
                               done
                           fi
                       done
-
+                      if [ "$saved" = "1" ]; then
+                          project=${project::-1}
+                      fi
+                      project+=']'
                       echo "project=$project"
                       echo "project=$project" >> $GITHUB_OUTPUT
         outputs:
