@@ -25,7 +25,7 @@ jobs:
                         fi
                     done
         outputs:
-            project: ${{ toJSON(steps.SaveResultPath.outputs.project) }}
+            project: ${{ toJSON(steps.*.outputs.project) }}
                      
   
     comment_test:
