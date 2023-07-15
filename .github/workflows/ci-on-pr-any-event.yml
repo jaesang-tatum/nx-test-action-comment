@@ -28,27 +28,16 @@ jobs:
                       fi
                   done
 
-                  echo "project=$project" >> $GITHUB_OUTPUT
-        outputs:
-            project: ${{steps.SaveResultPath.outputs.project}}
-                     
-  
-    comment_test:
-      runs-on: ubuntu-latest
-      needs: [test]
-      steps:
-        - name: Test2
-          run: echo "js_${{needs.test.outputs.project}}"
+                  echo -e "$project" > project.temp
 
-    comment:
-      runs-on: ubuntu-latest
-      needs: [test]
-      if : ${{success() && needs.test.outputs.project != null }}
-      steps:
-          - uses: actions/checkout@v2
-          - name: Jest Coverage Comment
-            uses: MishaKav/jest-coverage-comment@main
-            with:
-              github-token: ${{github.token}}
-              multiple-files: ${{needs.test.outputs.project}}
+            - name: Read file contents
+              id: read_file
+              uses: andstor/file-reader-action@v1
+              with:
+                path: "project.temp"
 
+            - name: Jest Coverage Comment
+              uses: MishaKav/jest-coverage-comment@main
+              with:
+                 github-token: ${{github.token}}
+                 multiple-files: ${{steps.read_file.outputs.contents}} 
