@@ -52,7 +52,7 @@ jobs:
       needs: [test]
       strategy:
         matrix:
-          value: ${{needs.test.outputs.project}}
+          value: ${{fromJson(needs.test.outputs.project)}}
       if : ${{success() && needs.test.outputs.project != null }}
       steps:
           - name: Jest Coverage Comment
