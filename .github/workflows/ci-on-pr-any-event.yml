@@ -55,6 +55,8 @@ jobs:
           value: ${{fromJSON(needs.test.outputs.project)}}
       if : ${{success() && needs.test.outputs.project != null }}
       steps:
+          - name: Test
+            run: cat ./coverage/${{matrix.value}}/coverage-summary.json 
           - name: Jest Coverage Comment
             uses: MishaKav/jest-coverage-comment@main
             with:
