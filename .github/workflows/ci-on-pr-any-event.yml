@@ -35,7 +35,7 @@ jobs:
                       echo "project=$project"
                       echo "project=$project" >> $GITHUB_OUTPUT
         outputs:
-            project: ${{(steps.*.outputs.project)}}
+            project: ${{toJson(steps.*.outputs.project)}}
                      
   
     comment_test:
@@ -44,7 +44,11 @@ jobs:
       steps:
         - name: Test
           run: echo "js_${{fromJson(needs.test.outputs.project)}}"
-  
+        - name: Test2
+          run: echo "js_${{needs.test.outputs.project}}"
+        - name: Test3
+          run: echo "js_${{toJson(needs.test.outputs.project)}}"
+
     comment:
       runs-on: ubuntu-latest
       needs: [test]
