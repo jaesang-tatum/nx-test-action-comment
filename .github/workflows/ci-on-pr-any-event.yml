@@ -16,16 +16,26 @@ jobs:
             - name: Saved result path
               id: SaveResultPath
               run: |
-                    for type in module product; do
-                        if [ -d "./coverage/$type" ]; then
-                            for dir in `ls ./coverage/$type`; do
-                                echo "project=$type/$dir"
-                                echo "project=$type/$dir" >> $GITHUB_OUTPUT
+                      project='['
+                      saved=0
+                      for type in module product; do
+                          if [ -d "./coverage/$type" ]; then
+                              for dir in `ls ./coverage/$type`; do
+                                  saved=1
+                                  project+="\"$type/$dir\","
                               done
-                        fi
-                    done
+                          fi
+                      done
+
+                      if [ "$saved" = "1" ]; then
+                          project=${project::-1}
+                      fi
+
+                      project+=']'
+                      echo "project=$project"
+                      echo "project=$project" >> $GITHUB_OUTPUT
         outputs:
-            project: "[\"module/common\", \"product/api\"]"
+            project: ${{toJson(steps.*.outputs.project)}}
                      
   
     comment_test:
