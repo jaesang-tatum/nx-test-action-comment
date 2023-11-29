@@ -19,7 +19,7 @@ jobs:
             - name: Saved result path
               id: SaveResultPath
               run: |
-                  sleep 5
+                  sleep 500
                   project=''
 
                   for type in module product; do
