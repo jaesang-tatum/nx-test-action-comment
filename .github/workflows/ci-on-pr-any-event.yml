@@ -3,6 +3,10 @@ on:
     pull_request:
         branches: ['*']
 
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cacnel-in-progress: true
+
 jobs:
     test:
         runs-on: ubuntu-latest
