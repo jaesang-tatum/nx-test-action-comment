@@ -4,10 +4,9 @@ on:
         branches: ['*']
 
 concurrency:
-    group: ${{ github.workflow }}-${{ github.ref }}
-    cacnel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
-    
 jobs:
     test:
         runs-on: ubuntu-latest
